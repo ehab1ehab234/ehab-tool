@@ -1,0 +1,15 @@
+{
+  "codes": [
+    {
+      "code": "EHAB-VIP",
+      "name": "الزبون المميز",
+      "active": true
+    },
+    {
+      "code": "TEST-123",
+      "name": "كود تجريبي",
+      "active": true
+    }
+  ],
+  "message": "تم التحديث"
+}

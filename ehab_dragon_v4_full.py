@@ -1,13 +1,14 @@
-#!/usr/bin/env python3
-# DRAGON V4.2 FINAL - KING EHAB - FIXED WEAK NET + OFFLINE CACHE
 
-import os, sys, requests, time, json, socket, random, string, hashlib
+#!/usr/bin/env python3
+# DRAGON V4.1 ULTIMATE - 20 BUTTONS ALL WORKING - KING EHAB
+
+import os, sys, requests, time, json, socket, random, string, hashlib, platform, datetime, re, urllib.parse
 import urllib3
 urllib3.disable_warnings()
 
-LOCAL_VER = "4.2"
-REPO_RAW = "https://raw.githubusercontent.com/ehab1ehab234/ehab-tool/main/version.json"
+LOCAL_VER = "4.1"
 CODES_RAW = "https://raw.githubusercontent.com/ehab1ehab234/ehab-tool/main/codes.json"
+VERSION_RAW = "https://raw.githubusercontent.com/ehab1ehab234/ehab-tool/main/version.json"
 
 R="\033[1;31m"; G="\033[1;32m"; Y="\033[1;33m"; C="\033[1;36m"; P="\033[1;35m"; W="\033[1;37m"; RST="\033[0m"
 
@@ -19,130 +20,188 @@ def banner():
 ██║  ██║██████╔╝███████║██║  ███╗██║   ██║██╔██╗ ██║
 ██║  ██║██╔══██╗██╔══██║██║   ██║██║   ██║██║╚██╗██║
 ██████╔╝██║  ██║██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║
-╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝
-{Y}      👑 KING EHAB V4.2 - OFFLINE MODE FIX 🔥🐲
-{G}           يشتغل حتى بدون نت - إصلاح تعز{RST}
+{Y}      👑 KING EHAB V4.1 ULTIMATE - 20 TOOLS 🔥🐲
+{G}           كل الأزرار شغالة حقيقي{RST}
 """)
 
 def check_update():
-    print(f"{C}[+] Checking Dragon Update...{RST}")
     try:
-        r = requests.get(REPO_RAW, timeout=3)
-        remote_ver = r.json().get("version", LOCAL_VER)
-        if remote_ver != LOCAL_VER:
-            print(f"{Y}[!] New version {remote_ver} available!{RST}")
-        else:
-            print(f"{G}[+] V4.2 Latest ✅{RST}")
+        requests.get(VERSION_RAW, timeout=2)
+        print(f"{G}[+] V4.1 Ultimate ✅{RST}")
     except:
-        print(f"{Y}[!] Offline Mode - Skipping update check 💤{RST}")
-        print(f"{G}[+] Continuing with local V4.2 ✅{RST}")
-        return
+        print(f"{Y}[!] Offline Mode ✅{RST}")
 
 def check_code():
-    print(f"{C}[*] Checking activation...{RST}")
-    cache_file = os.path.expanduser("~/.dragon_codes.json")
-    valid_codes = {}
-    message = "اهلا بالملك ايهاب"
-
-    for attempt in range(3):
-        try:
-            print(f"{Y}[{attempt+1}/3] Trying server...{RST}")
-            r = requests.get(CODES_RAW, timeout=8, verify=False)
-            data = r.json()
-            if "codes" in data:
-                for item in data["codes"]:
-                    if item.get("active") == True:
-                        valid_codes[item.get("code")] = item.get("owner", "King")
-            message = data.get("message", message)
-            with open(cache_file, 'w', encoding='utf-8') as f:
-                json.dump(data, f)
-            print(f"{G}[+] Online mode ✅{RST}")
-            break
-        except:
-            print(f"{R}[!] Weak net, retrying...{RST}")
-            time.sleep(1)
-
-    if not valid_codes:
-        try:
-            if os.path.exists(cache_file):
-                print(f"{Y}[!] No internet - Using offline cache 💾{RST}")
-                with open(cache_file, 'r', encoding='utf-8') as f:
+    cache = os.path.expanduser("~/.dragon_codes.json")
+    valid = {"EHAB-VIP": "الملك ايهاب", "TAIZ-777": "ملك تعز", "KING-2026": "الملك", "TEST-123": "Tester", "DRAGON-999": "تنين اليمن"}
+    msg = "اهلا بالملك ايهاب 👑 V4.1 Ultimate"
+    try:
+        r = requests.get(CODES_RAW, timeout=6, verify=False)
+        data = r.json()
+        valid = {x["code"]: x["owner"] for x in data.get("codes", []) if x.get("active")}
+        msg = data.get("message", msg)
+        with open(cache, 'w', encoding='utf-8') as f: json.dump(data, f)
+    except:
+        if os.path.exists(cache):
+            try:
+                with open(cache, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                for item in data.get("codes", []):
-                    if item.get("active") == True:
-                        valid_codes[item.get("code")] = item.get("owner", "King")
-                message = data.get("message", message)
-            else:
-                print(f"{Y}[!] Offline emergency mode 🔥{RST}")
-                valid_codes = {"EHAB-VIP": "الملك ايهاب", "TEST-123": "Tester"}
-        except:
-            valid_codes = {"EHAB-VIP": "الملك ايهاب"}
-
-    print(f"{Y}📢 {message}{RST}")
-    code = input(f"{P}🔑 ENTER DRAGON CODE ➤ {RST}").strip()
-    if code in valid_codes:
-        owner = valid_codes[code]
-        print(f"{G}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RST}")
-        print(f"{G}[+] Code OK! Welcome {owner} 👑{RST}")
-        print(f"{G}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RST}")
-        time.sleep(1)
-        return owner
+                    valid = {x["code"]: x["owner"] for x in data.get("codes", []) if x.get("active")}
+            except: pass
+    print(f"{Y}📢 {msg}{RST}")
+    code = input(f"{P}🔑 ENTER CODE ➤ {RST}").strip()
+    if code in valid:
+        print(f"{G}[+] Welcome {valid[code]} 👑{RST}"); time.sleep(1)
+        return valid[code]
     else:
-        print(f"{R}[-] Invalid Code! Contact @Ehab{RST}")
-        sys.exit()
+        print(f"{R}[-] Invalid! Use EHAB-VIP{RST}"); sys.exit()
 
-def tool_ip():
-    ip = input(f"{C}Enter IP/Domain ➤ {RST}").strip()
-    try:
-        r = requests.get(f"http://ip-api.com/json/{ip}", timeout=5).json()
-        print(f"{G}{json.dumps(r, indent=2, ensure_ascii=False)}{RST}")
-    except Exception as e:
-        print(f"{R}Error: {e}{RST}")
-    input(f"{Y}Press Enter...{RST}")
+def pause(): input(f"{Y}Press Enter...{RST}")
 
-def tool_port():
-    host = input(f"{C}Host (e.g google.com) ➤ {RST}").strip()
-    try:
-        for p in [21,22,80,443,3306,8080]:
-            s = socket.socket(); s.settimeout(1)
-            res = s.connect_ex((host, p))
-            print(f"{G if res==0 else R}[{'OPEN' if res==0 else 'CLOSED'}] Port {p}{RST}")
-            s.close()
-    except Exception as e:
-        print(f"{R}{e}{RST}")
-    input(f"{Y}Press Enter...{RST}")
+# === TOOLS ===
 
-def tool_pass():
+def tool_01_ip():
+    ip = input(f"{C}IP/Domain ➤ {RST}").strip()
     try:
-        l = int(input(f"{C}Length (8-32) ➤ {RST}") or "12")
-        chars = string.ascii_letters + string.digits + "!@#$%"
-        print(f"{G}🔑 Password: {''.join(random.choice(chars) for _ in range(l))}{RST}")
+        r = requests.get(f"http://ip-api.com/json/{ip}", timeout=6).json()
+        print(f"{G}Country: {r.get('country')} - City: {r.get('city')} - ISP: {r.get('isp')}\nLat: {r.get('lat')}, Lon: {r.get('lon')}{RST}")
+    except Exception as e: print(f"{R}{e}{RST}")
+    pause()
+
+def tool_02_phone():
+    phone = input(f"{C}Phone (with country code) ➤ {RST}").strip()
+    print(f"{G}Phone: {phone}\nCountry Check: {'Yemen +967' if phone.startswith('967') or phone.startswith('+967') else 'Intl'}\nLength: {len(phone)}\nValid: {phone.replace('+','').isdigit()}{RST}")
+    pause()
+
+def tool_03_port():
+    host = input(f"{C}Host ➤ {RST}").strip()
+    ports = [21,22,23,25,53,80,110,443,3306,8080]
+    for p in ports:
+        s=socket.socket(); s.settimeout(1)
+        res = s.connect_ex((host,p))
+        print(f"{G if res==0 else R}[{'OPEN' if res==0 else 'CLOSED'}] {host}:{p}{RST}")
+        s.close()
+    pause()
+
+def tool_04_pass():
+    try:
+        l = int(input(f"{C}Length (6-64) ➤ {RST}") or "16")
+        l = max(6, min(64, l))
+        chars = string.ascii_letters + string.digits + "!@#$%&*"
+        pwd = ''.join(random.choice(chars) for _ in range(l))
+        print(f"{G}🔑 {pwd}{RST}\nStrength: {'STRONG' if l>=12 else 'MEDIUM'}")
     except: pass
-    input(f"{Y}Press Enter...{RST}")
+    pause()
 
-def tool_hash():
-    txt = input(f"{C}Enter Text ➤ {RST}")
-    print(f"{G}MD5: {hashlib.md5(txt.encode()).hexdigest()}{RST}")
-    print(f"{G}SHA256: {hashlib.sha256(txt.encode()).hexdigest()}{RST}")
-    input(f"{Y}Press Enter...{RST}")
-
-def tool_site():
-    domain = input(f"{C}Enter Domain ➤ {RST}").strip()
+def tool_05_site():
+    d = input(f"{C}Domain (example.com) ➤ {RST}").strip()
     try:
-        r = requests.get(f"https://{domain}", timeout=5, verify=False)
-        print(f"{G}[+] Status: {r.status_code}{RST}")
-    except Exception as e:
-        print(f"{R}{e}{RST}")
-    input(f"{Y}Press Enter...{RST}")
+        r = requests.get(f"https://{d}", timeout=6, verify=False)
+        print(f"{G}Status: {r.status_code}\nServer: {r.headers.get('Server','?')}\nTitle: {r.text[:200]}{RST}")
+    except Exception as e: print(f"{R}{e}{RST}")
+    pause()
 
-def not_ready():
-    print(f"{Y}[!] Tool coming soon - ضيف كودك هنا{RST}")
-    input(f"{Y}Press Enter...{RST}")
+def tool_06_admin():
+    d = input(f"{C}Domain ➤ {RST}").strip()
+    paths = ["admin","administrator","admin/login","wp-admin","login","cpanel"]
+    for p in paths:
+        try:
+            url = f"https://{d}/{p}"
+            r = requests.get(url, timeout=3, verify=False)
+            if r.status_code in [200,301,302]:
+                print(f"{G}[FOUND] {url} -> {r.status_code}{RST}")
+            else:
+                print(f"{R}[NO] {p}{RST}")
+        except: pass
+    pause()
+
+def tool_07_email():
+    email = input(f"{C}Email ➤ {RST}").strip()
+    valid = re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email)
+    print(f"{G if valid else R}{'Valid ✅' if valid else 'Invalid ❌'} - {email}{RST}")
+    pause()
+
+def tool_08_url():
+    url = input(f"{C}URL ➤ {RST}").strip()
+    try:
+        if not url.startswith("http"): url="https://"+url
+        r = requests.head(url, timeout=5, allow_redirects=True, verify=False)
+        print(f"{G}Final URL: {r.url}\nStatus: {r.status_code}\nLength: {len(r.url)}{RST}")
+    except Exception as e: print(f"{R}{e}{RST}")
+    pause()
+
+def tool_09_ping():
+    host = input(f"{C}Host to ping ➤ {RST}").strip()
+    os.system(f"ping -c 4 {host}")
+    pause()
+
+def tool_10_clear(): os.system('clear')
+
+def tool_11_user():
+    user = input(f"{C}Username ➤ {RST}").strip()
+    sites = {"Instagram": f"https://instagram.com/{user}", "GitHub": f"https://github.com/{user}", "TikTok": f"https://tiktok.com/@{user}"}
+    for name, url in sites.items():
+        try:
+            r = requests.get(url, timeout=4)
+            print(f"{G if r.status_code==200 else R}[{name}] {url} -> {r.status_code}{RST}")
+        except: print(f"{R}[{name}] Error{RST}")
+    pause()
+
+def tool_12_ui():
+    print(f"{P}🎨 Dragon Colors: {R}RED {G}GREEN {Y}YELLOW {C}CYAN {P}PURPLE{RST}")
+    pause()
+
+def tool_13_qr():
+    text = input(f"{C}Text for QR ➤ {RST}").strip()
+    enc = urllib.parse.quote(text)
+    print(f"{G}QR Link: https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={enc}{RST}")
+    pause()
+
+def tool_14_hash():
+    t = input(f"{C}Text ➤ {RST}")
+    print(f"{G}MD5: {hashlib.md5(t.encode()).hexdigest()}\nSHA1: {hashlib.sha1(t.encode()).hexdigest()}\nSHA256: {hashlib.sha256(t.encode()).hexdigest()}{RST}")
+    pause()
+
+def tool_15_myip():
+    try:
+        r = requests.get("https://api.ipify.org?format=json", timeout=5).json()
+        print(f"{G}Your IP: {r.get('ip')}{RST}")
+        r2 = requests.get(f"http://ip-api.com/json/{r.get('ip')}", timeout=5).json()
+        print(f"Location: {r2.get('country')} - {r2.get('city')}")
+    except Exception as e: print(f"{R}{e}{RST}")
+    pause()
+
+def tool_16_date():
+    now = datetime.datetime.now()
+    print(f"{G}Date: {now.strftime('%Y-%m-%d')}\nTime: {now.strftime('%H:%M:%S')}\nYemen: {now}{RST}")
+    pause()
+
+def tool_17_calc():
+    expr = input(f"{C}Calc (e.g 5*5+10) ➤ {RST}")
+    try: print(f"{G}Result: {eval(expr, {'__builtins__':None}, {})}{RST}")
+    except Exception as e: print(f"{R}Error: {e}{RST}")
+    pause()
+
+def tool_18_rand():
+    try:
+        a = int(input(f"{C}Min ➤ {RST}") or "1")
+        b = int(input(f"{C}Max ➤ {RST}") or "100")
+        print(f"{G}Random: {random.randint(a,b)}{RST}")
+    except: pass
+    pause()
+
+def tool_19_sys():
+    print(f"{G}System: {platform.system()} {platform.release()}\nMachine: {platform.machine()}\nPython: {platform.python_version()}\nNode: {platform.node()}{RST}")
+    pause()
+
+def tool_20_contact():
+    print(f"{Y}👑 King Ehab\nGitHub: github.com/ehab1ehab234/ehab-tool\nTelegram: @EhabKing\nLocation: Taiz, Yemen{RST}")
+    pause()
 
 def menu(owner):
     while True:
         banner()
-        print(f"{P}👑 Logged as: {owner} | V4.2 OFFLINE FIX{RST}\n")
+        print(f"{P}👑 {owner} | V4.1 ULTIMATE - 20 TOOLS WORKING{RST}\n")
         print(f"""{Y}[01] 🔥 IP Tracker       [11] 🔍 Username Finder
 [02] 📱 Phone Info        [12] 🎨 Deluxe UI
 [03] 🌐 Port Scanner      [13] 📷 QR Generator
@@ -155,19 +214,32 @@ def menu(owner):
 [10] 🧹 Clear Screen      [20] 📞 Contact King
 {R}[00] 🚪 EXIT{W}
 """)
-        choice = input(f"{C}Dragon > {RST}").strip()
-        if choice == "00": 
-            print(f"{Y}Bye King {owner}! 👑{RST}"); sys.exit()
-        elif choice == "01": tool_ip()
-        elif choice == "03": tool_port()
-        elif choice == "04": tool_pass()
-        elif choice == "05": tool_site()
-        elif choice == "14": tool_hash()
-        elif choice == "10": os.system('clear')
-        else: not_ready()
+        c = input(f"{C}Dragon [{owner}] > {RST}").strip().zfill(2)
+        if c=="00": print(f"{Y}Bye King {owner}! 👑{RST}"); sys.exit()
+        elif c=="01": tool_01_ip()
+        elif c=="02": tool_02_phone()
+        elif c=="03": tool_03_port()
+        elif c=="04": tool_04_pass()
+        elif c=="05": tool_05_site()
+        elif c=="06": tool_06_admin()
+        elif c=="07": tool_07_email()
+        elif c=="08": tool_08_url()
+        elif c=="09": tool_09_ping()
+        elif c=="10": tool_10_clear()
+        elif c=="11": tool_11_user()
+        elif c=="12": tool_12_ui()
+        elif c=="13": tool_13_qr()
+        elif c=="14": tool_14_hash()
+        elif c=="15": tool_15_myip()
+        elif c=="16": tool_16_date()
+        elif c=="17": tool_17_calc()
+        elif c=="18": tool_18_rand()
+        elif c=="19": tool_19_sys()
+        elif c=="20": tool_20_contact()
+        else: print(f"{R}Invalid choice{RST}"); time.sleep(1)
 
 if __name__ == "__main__":
     banner()
     check_update()
-    king_name = check_code()
-    menu(king_name)
+    king = check_code()
+    menu(king)

@@ -1,92 +1,87 @@
 #!/usr/bin/env python3
-# DRAGON V4.1 - KING EHAB EDITION 🐉🔥
-# 12 Tools + Deluxe UI + Auto Update
+# DRAGON V4.1 - KING EHAB EDITION 🐲👑
+# 12 Tools + Deluxe UI + Auto Update + Code System
 
-import os, sys, time, requests, json, subprocess
+import os, sys, time, requests, json
 
 LOCAL_VER = "4.1"
 REPO_RAW = "https://raw.githubusercontent.com/ehab1ehab234/ehab-tool/main/version.json"
 FILE_RAW = "https://raw.githubusercontent.com/ehab1ehab234/ehab-tool/main/ehab_dragon_v4_full.py"
+CODES_RAW = "https://raw.githubusercontent.com/ehab1ehab234/ehab-tool/main/codes.json"
 
 # Colors
-R="\033[1;31m"; G="\033[1;32m"; Y="\033[1;33m"; B="\033[1;34m"; C="\033[1;36m"; W="\033[1;37m"; P="\033[1;35m"; RESET="\033[0m"
+R="\033[1;31m"; G="\033[1;32m"; Y="\033[1;33m"; B="\033[1;34m"
+C="\033[1;36m"; W="\033[1;37m"; P="\033[1;35m"; RESET="\033[0m"
 
 def banner():
     os.system('clear')
     print(f"""{R}
- ██████╗ ██████╗  █████╗  ██████╗  ██████╗ ███╗   ██╗
- ██╔══██╗██╔══██╗██╔══██╗██╔════╝ ██╔═══██╗████╗  ██║
- ██║  ██║██████╔╝███████║██║  ███╗██║   ██║██╔██╗ ██║
- ██║  ██║██╔══██╗██╔══██║██║   ██║██║   ██║██║╚██╗██║
- ██████╔╝██║  ██║██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║
- ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝
-{C}             KING EHAB V{LOCAL_VER} - DELUXE EDITION 👑🔥{RESET}
-{Y}═══════════════════════════════════════════════════════{RESET}
-""")
+  EHAB
+     {Y}Ehab Al-Dabai YE | Android 15 {W}
+  DRAGON
+     KING EHAB V{LOCAL_VER} - DELUXE EDITION 👑{RESET}""")
 
 def check_update():
     print(f"{C}[+] Checking Dragon Update...{RESET}")
     try:
         r = requests.get(REPO_RAW, timeout=5)
-        if r.status_code != 200:
-            print(f"{R}[-] version.json not found (404){RESET}")
-            time.sleep(1)
-            return
-        data = r.json()
-        remote = str(data.get("latest_version", LOCAL_VER))
-        msg = data.get("update_msg", "")
-        print(f"{Y}Local: {LOCAL_VER} | GitHub: {remote}{RESET}")
-        if remote != LOCAL_VER and remote > LOCAL_VER:
-            print(f"""{R}
-🔔🔔🔔🔔🔔🔔🔔🔔🔔🔔🔔🔔
-🔔 DRAGON UPDATE FOUND! 🔔
-🔔 YOU: V{LOCAL_VER} -> NEW: V{remote} 🔔
-🔔 {msg} 🔔
-🔔 KING EHAB, UPDATE NOW! 🔔
-🔔🔔🔔🔔🔔🔔🔔🔔{RESET}
-{Y}[Y] YES 🔥  [N] NO 😴{RESET}""")
-            ch = input(f"{C}UPDATE? ➤ {RESET}").lower()
-            if ch == 'y':
-                print(f"{G}[+] Downloading V{remote}... 🚀{RESET}")
-                nr = requests.get(FILE_RAW, timeout=15)
-                if nr.status_code == 200:
-                    open(__file__, 'w', encoding='utf-8').write(nr.text)
-                    print(f"{G}[+] DONE! Run again: python {os.path.basename(__file__)}{RESET}")
-                    sys.exit()
-                else:
-                    print(f"{R}[-] File not found on GitHub! Upload {os.path.basename(__file__)} first!{RESET}")
-                    time.sleep(2)
+        remote_ver = r.json().get("version", LOCAL_VER)
+        if remote_ver != LOCAL_VER:
+            print(f"{Y}[!] New version {remote_ver} found! Current {LOCAL_VER}{RESET}")
+            ans = input(f"{Y}UPDATE? [y/n] > {RESET}").lower()
+            if ans == 'y':
+                print(f"{G}[+] Downloading V{remote_ver}.... 🚀{RESET}")
+                new_code = requests.get(FILE_RAW, timeout=10).text
+                with open(__file__, 'w') as f:
+                    f.write(new_code)
+                print(f"{G}~ Updated! Run again!{RESET}")
+                sys.exit()
         else:
             print(f"{G}[+] You have latest version V{LOCAL_VER} ✅{RESET}")
-            time.sleep(1)
     except Exception as e:
-        print(f"{R}[-] Update check error: {e}{RESET}")
-        time.sleep(1)
+        print(f"{R}[-] Update check failed: {e}{RESET}")
+
+def check_code():
+    print(f"{C}[*] Checking activation...{RESET}")
+    try:
+        r = requests.get(CODES_RAW, timeout=5)
+        data = r.json()  # مثلا: ["EHAB-123", "DRAGON-VIP"]
+        # يدعم list أو dict
+        valid = []
+        if isinstance(data, list):
+            valid = data
+        elif isinstance(data, dict):
+            valid = list(data.values()) + list(data.keys())
+
+        code = input(f"{P}🔑 ENTER DRAGON CODE ➤ {RESET}").strip()
+        if code in valid:
+            print(f"{G}[+] Code OK! Welcome King 👑{RESET}")
+            time.sleep(1)
+            return True
+        else:
+            print(f"{R}[-] Invalid Code! Contact Ehab Al-Dabai{RESET}")
+            sys.exit()
+    except Exception as e:
+        print(f"{R}[-] Code server error: {e}{RESET}")
+        sys.exit()
 
 def menu():
     banner()
-    print(f"""{G}
-[01] 🔥 IP Tracker          [07] 📧 Email Bomber
-[02] 📱 Phone Tracker       [08] 🔑 Password Gen
-[03] 🌐 Port Scanner        [09] 📷 Cam Phisher
-[04] 🔍 User Finder         [10] 🌍 Site Info
-[05] 💣 SMS Bomber          [11] 👑 Admin Panel Finder
-[06] 📡 DDOS Tool           [12] 🎨 Deluxe UI
-{Y}═══════════════════════════════════════════════════════
-[00] 🚪 EXIT{RESET}""")
+    print(f"""
+{Y}[01] IP Tracker       [07] Tool 7
+[02] Phone Tracker     [08] Tool 8
+[03] Port Scanner      [09] Tool 9
+[04] User Finder       [10] Tool 10
+[05] Tool 5            [11] Tool 11
+[06] Tool 6            [12] Deluxe UI{W}
+""")
+    choice = input(f"{C}Dragon > {RESET}")
+    # هنا تحط دوال أدواتك الخاصة
+    print(f"{Y}You chose {choice} - ضع كود أداتك هنا{RESET}")
 
-def main():
-    check_update()
-    while True:
-        menu()
-        c = input(f"{C}\nDragon ➤ {RESET}")
-        if c == "00" or c == "0":
-            print(f"{Y}Bye King! 👑{RESET}"); break
-        elif c in [str(i) for i in range(1,13)]:
-            print(f"{G}[*] Tool {c} - Coming Soon in V4.2! 🔥{RESET}")
-            input(f"{Y}Press Enter...{RESET}")
-        else:
-            print(f"{R}Invalid!{RESET}"); time.sleep(0.5)
-
+# --- التشغيل الرئيسي مرة واحدة ---
 if __name__ == "__main__":
-    main()
+    banner()
+    check_update()
+    check_code()
+    menu()

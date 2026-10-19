@@ -2,14 +2,14 @@
   "codes": [
     {
       "code": "EHAB-VIP",
-      "name": "الزبون المميز",
+      "name": "Ehab King",
       "active": true
     },
     {
       "code": "TEST-123",
-      "name": "كود تجريبي",
-      "active": true 
+      "name": "تجربة",
+      "active": true
     }
   ],
-  "message": "تم التحديث"
+  "message": "اهلا بالجميع"
 }

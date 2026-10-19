@@ -1,5 +1,15 @@
-{
-  "latest_version": "4.1",
-  "update_msg": "Dragon V4.1 - New Power + 12 Tools! 🔥🐉",
-  "download_url": "https://raw.githubusercontent.com/ehab1ehab234/ehab-tool/main/ehab_dragon_v4_full.py"
-}
+def check_update():
+    print(f"{C}[+] Checking Dragon Update...{RST}")
+    try:
+        # مهلة قصيرة عشان ما يعلق
+        r = requests.get(REPO_RAW, timeout=3)
+        remote_ver = r.json().get("version", LOCAL_VER)
+        if remote_ver != LOCAL_VER:
+            print(f"{Y}[!] New version {remote_ver} available!{RST}")
+        else:
+            print(f"{G}[+] V4.1 Latest ✅{RST}")
+    except:
+        # لو النت ضعيف - لا توقف الأداة، كمل طوالي!
+        print(f"{Y}[!] Offline Mode - Skipping update check 💤{RST}")
+        print(f"{G}[+] Continuing with local V4.1 ✅{RST}")
+        return  # مهم جداً - يخليه يكمل للكود

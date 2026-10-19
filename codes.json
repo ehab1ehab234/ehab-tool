@@ -1,3 +1,25 @@
 {
-  "codes": [ {"code": "EHAB-VIP"}, ... ]
+  "message": "اهلا بالجميع - مرحبا بكم في تنين الملك ايهاب V4.1",
+  "codes": [
+    {
+      "code": "EHAB-VIP",
+      "owner": "الملك ايهاب",
+      "active": true
+    },
+    {
+      "code": "TEST-123",
+      "owner": "Tester",
+      "active": true
+    },
+    {
+      "code": "KING-2026",
+      "owner": "صديق الملك",
+      "active": true
+    },
+    {
+      "code": "DRAGON-OLD",
+      "owner": "منتهي",
+      "active": false
+    }
+  ]
 }

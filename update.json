@@ -1,5 +1,6 @@
-{
-  "latest_version": "4.1",
-  "update_msg": "Dragon V4.1 - New Dragon Power!",
-  "download_url": "https://raw.githubusercontent.com/ehab1ehab234/ehab-tool/main/ehab_final_v4.py"
-}
+1. import  <-- المكتبات فوق
+2. check_update() <-- دالة الإشعار الفخم 🐉
+3. check_update() <-- تشغيل الفحص (لازم تناديها!)
+4. check_code() <-- فحص مفتاح الملك 🔑
+5. dragon_banner() <-- شعار EHAB الضخم
+6. while menu <-- القائمة المقدسة

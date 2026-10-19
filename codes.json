@@ -1,15 +1,3 @@
 {
-  "codes": [
-    {
-      "code": "EHAB-VIP",
-      "name": "Ehab King",
-      "active": true
-    },
-    {
-      "code": "TEST-123",
-      "name": "تجربة",
-      "active": true
-    }
-  ],
-  "message": "اهلا بالجميع"
+  "codes": [ {"code": "EHAB-VIP"}, ... ]
 }

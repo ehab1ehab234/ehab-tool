@@ -1,4 +1,48 @@
-{
-  "version": "4.0",
-  "message": "🔥 اهلا بكم في EHAB TOOL من تعز - ملك التنين"
-}
+def check_update():
+    try:
+        data = requests.get(VER_URL, timeout=5).json()
+        latest = data["latest_version"]
+        if latest != LOCAL_VER:
+            os.system("clear")
+            # شعار التنين قبل الإشعار
+            print(f"{R}")
+            print(" ███████╗██╗  ██╗ █████╗ ██████╗ ")
+            print(" ██╔════╝██║  ██║██╔══██╗██╔══██╗")
+            print(" █████╗  ███████║███████║██████╔╝")
+            print(" ██╔══╝  ██╔══██║██╔══██║██╔══██╗")
+            print(" ███████╗██║  ██║██║  ██║██████╔╝")
+            print(" ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝")
+            print(f"{W}")
+            
+            print(f"{Y}╔══════════════════════════════════════════╗")
+            print(f"║  🔔🔔 DRAGON UPDATE ALERT! 🔔🔔       ║")
+            print(f"╠══════════════════════════════════════════╣")
+            print(f"║  🐉 New Dragon Power Detected!           ║")
+            print(f"║                                          ║")
+            print(f"║  📦 Your Cave Version : {LOCAL_VER}              ║")
+            print(f"║  🚀 Latest Dragon Ver : {latest}              ║")
+            print(f"║                                          ║")
+            print(f"║  💬 Message from Dragon:                  ║")
+            print(f"║  {data['update_msg'][:38]:<38} ║")
+            print(f"╠══════════════════════════════════════════╣")
+            print(f"║  👑 King, your cave is old! Update now!  ║")
+            print(f"╚══════════════════════════════════════════╝{W}")
+            
+            print(f"\n{G}    🐉 RAAAWR! Dragon brings new fire! 🔥{W}\n")
+            
+            q = input(f"{C}╰─🐉 King, Update now? (y/n): {W}")
+            if q.lower() == "y":
+                print(f"\n{Y}[*] Dragon is breathing fire... Updating! 🐉🔥{W}")
+                for _ in range(3):
+                    time.sleep(0.4)
+                    print(f"{G} 🔥 {W}", end=""); sys.stdout.flush()
+                print(f"\n{G}[+] Cave Updated! Restarting...{W}")
+                new_code = requests.get(data["download_url"], timeout=10).text
+                open(__file__,"w", encoding="utf-8").write(new_code)
+                print(f"{G}[+] Run again: python {__file__}{W}")
+                exit()
+            else:
+                print(f"\n{D}[*] King {name if 'name' in locals() else ''} said later... Opening old cave...{W}")
+                time.sleep(1.5)
+    except Exception as e:
+        pass

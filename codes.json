@@ -1,11 +1,9 @@
-{
-  "message": "اهلا بالملك ايهاب 👑 V4.2",
-  "codes": [
-    {"code": "EHAB-VIP", "owner": "الملك ايهاب", "active": true},
-    {"code": "TAIZ-777", "owner": "ملك تعز", "active": true},
-    {"code": "KING-2026", "owner": "الملك", "active": true},
-    {"code": "TEST-123", "owner": "Tester", "active": true},
-    {"code": "EHAB-TAIZ", "owner": "إيهاب ملك تعز", "active": true},
-    {"code": "DRAGON-999", "owner": "تنين اليمن", "active": true}
-  ]
+codes={
+    "EHAB-VIP": {"name":"KING EHAB 👑","dragon":"gold","msg":"WELCOME KING EHAB 👑🐉"},
+    "EHAB-KING": {"name":"KING Tester 👑","dragon":"gold","msg":"WELCOME KING 👑🔥"},
+    "TEST-123": {"name":"Tester","dragon":"gold","msg":"Test Dragon 🧪🐉"},
+    "DRAGON-001": {"name":"زبون 1","dragon":"gold","msg":"VIP 1 ⚡🐉"},
+    "DRAGON-002": {"name":"زبون 2","dragon":"gold","msg":"VIP 2 ⚡🐉"},
+    "DRAGON-003": {"name":"زبون 3","dragon":"gold","msg":"VIP 3 ⚡🐉"},
+    "TAIZ-777": {"name":"زبون تعز","dragon":"gold","msg":"Welcome Taiz King 🐉"},
 }

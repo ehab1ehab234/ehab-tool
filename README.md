@@ -2,7 +2,7 @@
 ### By EHAB AL-DABAEI - Malik Taiz
 **From Taiz to the world 🔥**
 
-![DRAGON](banner.jpg) 
+![DRAGON](IMG-20261020-WA5742.jpg) 
 
 ## ✨ المميزات - 20 قوة
 
